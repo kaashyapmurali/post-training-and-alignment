@@ -1,0 +1,30 @@
+# Project config (local only)
+CLAUDE.md
+docs/references/
+
+# Environment
+.env
+__pycache__/
+*.pyc
+.venv/
+
+# Model checkpoints and outputs
+models/
+checkpoints/
+outputs/
+
+# Training logs
+wandb/
+runs/
+
+# Data
+data/
+
+# Hugging Face cache
+.cache/
+
+# OS
+.DS_Store
+
+# Jupyter
+.ipynb_checkpoints/

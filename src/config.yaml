@@ -1,0 +1,17 @@
+DEV: true
+model: Qwen/Qwen2.5-0.5B
+dataset: yahma/alpaca-cleaned
+lora:
+  r: 8
+  alpha: 16
+  target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
+  dropout: 0.05
+training:
+  learning_rate: 0.00002
+  epochs: 3
+  train_batch_size: 4
+  eval_batch_size: 4
+  gradient_accumulation_steps: 4
+  logging_steps: 50
+  save_steps: 100
+  eval_steps: 100

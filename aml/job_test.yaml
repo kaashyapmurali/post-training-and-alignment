@@ -4,6 +4,6 @@ display_name: sft-dev-test
 command: >
   export PATH="/app/.venv/bin:$PATH" &&
   python src/main.py
-code: .
+code: ../
 environment: azureml:sft-env:1
 compute: azureml:sft-cpu

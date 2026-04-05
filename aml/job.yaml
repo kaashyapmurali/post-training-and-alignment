@@ -2,8 +2,9 @@ $schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
 type: command
 display_name: sft-dev
 command: >
+  uv sync --frozen --no-dev --no-install-project --directory /app &&
   export PATH="/app/.venv/bin:$PATH" &&
   python src/main.py
 code: ../
-environment: azureml:sft-env:1
+environment: azureml:sft-env@latest
 compute: azureml:sft-gpu

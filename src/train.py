@@ -1,5 +1,4 @@
-from datetime import datetime
-from zoneinfo import ZoneInfo
+
 import json
 from transformers import AutoModelForCausalLM
 from transformers import AutoTokenizer
@@ -22,8 +21,8 @@ class SFT:
 
     def fine_tune(self):
         config = self.config
-        run_id = datetime.now(ZoneInfo("America/Los_Angeles")).strftime("%Y%m%d_%H%M%S")
-        output_dir = f"{config['ROOT']}/outputs/sft/{run_id}"
+        print(f"Fine-tuning model, model={config['model']}")
+        output_dir = f"{config['ROOT']}/outputs/sft/{config['run_id']}"
         if config['DEV']:
             self.dataset['train'] = self.dataset["train"].select(range(100))
         dt = self.dataset["train"].train_test_split(test_size=0.2)
@@ -63,7 +62,7 @@ class SFT:
         trainer.save_model(f"{output_dir}/final")
         with open(f"{output_dir}/log_history.json", "w") as f:
             json.dump(trainer.state.log_history, f)
-
+        print("Training completed")
 
 def format_alpaca(example):
     return (
@@ -71,4 +70,3 @@ def format_alpaca(example):
         f"### Input:\n{example['input']}\n\n"
         f"### Response:\n{example['output']}"
     )
-

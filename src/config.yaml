@@ -1,6 +1,10 @@
 DEV: true
 model: Qwen/Qwen2.5-0.5B
 dataset: yahma/alpaca-cleaned
+finetune: false
+eval-base: true
+eval-finetune: false
+eval-runid: null
 lora:
   r: 8
   alpha: 16

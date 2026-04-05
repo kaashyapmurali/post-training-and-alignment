@@ -1,5 +1,10 @@
 .venv/
 .git/
+.gitignore
+.python-version
+job*.yaml
+environment.yaml
+Dockerfile
 outputs/
 models/
 data/

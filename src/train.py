@@ -13,11 +13,16 @@ class SFT:
 
     def _load(self, config):
         self.config = config
-        self.model = AutoModelForCausalLM.from_pretrained(config["model"])
+        self.model = AutoModelForCausalLM.from_pretrained(config["model"], device_map="auto")
         self.tokenizer = AutoTokenizer.from_pretrained(config["model"])
         self.tokenizer.pad_token = self.tokenizer.eos_token
         self.dataset = load_dataset(config["dataset"])
         print(f"Loaded model={config['model']}, dataset={config['dataset']}")
+        print(f"Model device: {next(self.model.parameters()).device}")
+        if torch.cuda.is_available():
+            print(f"GPU: {torch.cuda.get_device_name(0)}")
+            print(f"bf16 supported: {torch.cuda.is_bf16_supported()}")
+            print(f"GPU memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
 
     def fine_tune(self):
         config = self.config
@@ -40,6 +45,7 @@ class SFT:
             output_dir=output_dir,
             num_train_epochs=config["training"]["epochs"],
             max_steps=-1 if not config["DEV"] else 10,
+            max_length=config["training"]["max_seq_length"],
             per_device_train_batch_size=config["training"]["train_batch_size"] if not config['DEV'] else 1,
             per_device_eval_batch_size=config["training"]["eval_batch_size"] if not config['DEV'] else 1,
             gradient_accumulation_steps=config["training"]["gradient_accumulation_steps"],
@@ -48,6 +54,7 @@ class SFT:
             eval_steps=config["training"]["eval_steps"] if not config["DEV"] else 5,
             eval_strategy="steps",
             bf16=torch.cuda.is_available() or torch.backends.mps.is_available(),
+            packing=True
         )
         trainer = SFTTrainer(
             model=self.model,

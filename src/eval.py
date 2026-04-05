@@ -21,7 +21,7 @@ class Evaluator:
         assert type in ["base", "finetune"], "wrong model type specified"
 
         if type == "base":
-            model = AutoModelForCausalLM.from_pretrained(self.config["model"])
+            model = AutoModelForCausalLM.from_pretrained(self.config["model"], device_map="auto")
             print(f"Running eval on base model, model={self.config['model']}")
             return model
 
@@ -32,7 +32,7 @@ class Evaluator:
             assert eval_run_id is not None, "eval_run_id can't be None"
             print(f"Running eval on fine-tuned model, model={config['model']}, eval_run_id={eval_run_id}")
             adapter_dir = f"{config['ROOT']}/outputs/sft/{eval_run_id}"
-            base_model = AutoModelForCausalLM.from_pretrained(self.config["model"])
+            base_model = AutoModelForCausalLM.from_pretrained(self.config["model"], device_map="auto")
             model = PeftModel.from_pretrained(base_model, f"{adapter_dir}/final")
             return model
 

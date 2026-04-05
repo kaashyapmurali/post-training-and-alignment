@@ -15,6 +15,7 @@ training:
   epochs: 3
   train_batch_size: 4
   eval_batch_size: 4
+  max_seq_length: 1024
   gradient_accumulation_steps: 4
   logging_steps: 50
   save_steps: 100

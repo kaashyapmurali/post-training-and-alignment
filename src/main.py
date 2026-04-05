@@ -1,9 +1,17 @@
 import yaml
+import torch
 from datetime import datetime, timezone
 from pathlib import Path
 from train import SFT
 from eval import Evaluator
 
+def printDevice():
+    if torch.cuda.is_available():
+        print(f"Device: CUDA ({torch.cuda.get_device_name(0)})")
+    elif torch.backends.mps.is_available():
+        print("Device: MPS (Apple Silicon)")
+    else:
+        print("Device: CPU")
 
 def getConfig():
     config_path = Path(__file__).parent / "config.yaml"
@@ -35,5 +43,6 @@ def run(config):
             print(results['results'])
 
 if __name__ == "__main__":
+    printDevice()
     config = getConfig()
     run(config)
